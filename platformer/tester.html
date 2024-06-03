@@ -10,25 +10,25 @@
          top: 0;
          left: 0;
          right: 0;
-         
+
       }
-      
+
       #respawn {
          visibility: hidden;
       }
-      </style>
+   </style>
 </head>
 
 <body>
    <button id="respawn" onclick="restart()">respawn</button>
    <canvas id="board" width="100" height="100"></canvas>
    <script>
-    // Changes:
-    // better animation
-    // fixed platforms
-    // spikes
-    // moving platforms
-      let player_gameframes=0;
+      // Changes:
+      // better animation
+      // fixed platforms
+      // spikes
+      // moving platforms
+      let player_gameframes = 0;
       let isground
       let coyotetime = 0;
       let hearts = {
@@ -93,47 +93,41 @@
       var framecount = 0;
       var checkpoint = 0;
       goomba_coords = [
-         1000, 730,
-         2000, 730
+         1000, 230,
+         2000, 230
       ]
-      for (var i=0; i < goomba_coords.length /2; i++) {
+      for (var i = 0; i < goomba_coords.length / 2; i++) {
          goomba.health.push(9);
       }
 
       levels = [
-          
-          1000,780,500,500,
-          500,780,500,500,
-         
-
-        
-    ]
-     let spike=[
-         1500,980,200,200,
-         1500,980,200,200,
-        
-         
-         
+         1000, 780, 500, 500,
+         500, 780, 500, 500,
+         3000, 980, 600, 100
       ]
-      checkpoint=0;
+      let spike = [
+         1500, 980, 200, 200,
+         1500, 980, 200, 200,
+      ]
+      checkpoint = 0;
       console.log(spike[1])
 
-     
+
       var floor = (window.innerHeight / 2 - 100);
       var platformY = 0;
       var platformX = 0;
       var platformwidth = 0;
       var platformheight = 0;
       var gameframes = 0;
-      
-     
+
+
       let player = {
          width: 100,
          height: 100,
          x: 200,
          y: 800,
-         screenY:0,
-         screenX:0
+         screenY: 0,
+         screenX: 0
       }
       let xvelocity = 0;
       let gravityspeed = 0;
@@ -143,135 +137,123 @@
       let goomba_animate = {
          hurt: {
             width: 240,
-            height:280,
+            height: 280,
             starW: 155,
             frames: 0,
-            y:1
+            y: 1
          },
          hit: {
             width: 270,
             height: 280,
             starW: 400,
             frames: 0,
-            y:1
+            y: 1
          },
          idle: {
             width: 200,
             height: 325,
             starW: 650,
             frames: 0,
-            y:1
-            
+            y: 1
+
          },
-         stall:{
+         stall: {
             width: 200,
             height: 400,
             starW: 1,
             frames: 0,
-            y:1
+            y: 1
          },
          idle_left: {
             width: 240,
-            height:320,
+            height: 320,
             starW: 830,
             frames: 0,
-            y:1
+            y: 1
          },
          hurt_left: {
             width: 260,
             height: 280,
             starW: 1300,
             frames: 0,
-            y:1
+            y: 1
          },
          hit_left: {
             width: 270,
             height: 280,
             starW: 1050,
             frames: 0,
-            y:1
-            
+            y: 1
+
          },
-         stall_left:{
+         stall_left: {
             width: 200,
             height: 300,
             starW: 1300,
             frames: 0,
-            y:1
+            y: 1
          }
 
       }
       let shooter_animate = {
-        
-        
-         stall:{
+
+
+         stall: {
             width: 170,
             height: 350,
             starW: 1,
             frames: 0,
-            y:1
+            y: 1
          },
-         
-            
-         }
-       
-      let currentanimation_shooter=shooter_animate.stall;
+
+
+      }
+
+      let currentanimation_shooter = shooter_animate.stall;
       let currentanimation_goomba = goomba_animate.idle_left;
-      let past_checkpoint=0;
+      let past_checkpoint = 0;
       let animatelist = {
          idle: {
-            width: 96,
+            width: 86,
             height: 100,
             startW: 0,
             frames: 0
          },
          runleft: {
-            width: 62,
-            height: 69,
-            startW: (110),
+            width: 100,
+            height: 96,
+            startW: 170+270,
             frames: 2
          },
          runright: {
-            width: 96,
-            height: 69,
-            startW: 106,
+            width: 100,
+            height: 96,
+            startW: 170+106,
             frames: 2
          },
          shootright: {
-            width: 64,
-            height: 69,
-            startW: (112 + 88),
+            width: 140,
+            height: 100,
+            startW: (600),
             frames: 0
          },
          shootleft: {
-            width: 62,
-            height: 69,
-            startW: 225,
-            frames: 0
-         },
-         parryleft: {
-            width: 90,
-            height: 90,
-            startW: (285),
-            frames: 0
-         },
-         parryright: {
-            width: 80,
-            height: 69,
-            startW: (385),
+            width: 140,
+            height: 100,
+            startW: (660),
             frames: 0
          },
          slashright: {
-            width: 90,
-            height: 69,
-            startW: (315),
-            frames: 0
+            width: 120,
+            height: 90,
+            startW: 40,
+            frames: 2
          },
          slashleft: {
-            width: 90,
+            width: 120,
             height: 90,
-            startW: (370),
-            frames: 0
+            startW: 90,
+            frames: 2
          }
       }
       var counter = 0;
@@ -279,13 +261,13 @@
       shooterImg = new Image();
       shooterImg.src = "shooter.png";
       playerImg = new Image();
-      playerImg.src = "player copy.png";
+      playerImg.src = "player.png";
       goombaImg = new Image();
       goombaImg.src = "goomba_sheet.png";
       spikeImg = new Image();
       spikeImg.src = "spike.png";
       var currentanimation = animatelist.idle;
-      ctx.canvas.height=800;
+      ctx.canvas.height = 800;
       const viewportWidth = ctx.canvas.width;
       const viewportHeight = ctx.canvas.height;
       const worldWidth = 2000;
@@ -298,87 +280,112 @@
             a.y + a.height > b.y;
       }
       function obstacle(arr, platformwidth, platformheight, platformX, platformY, levelOffset, img) {
-    ctx.fillStyle = "blue";
-    for (var a = 0; a < arr.length; a += 4) { // Ensure correct iteration
-        platformX = arr[a] + levelOffset;
-        platformY = arr[a + 1] - camera.y;
-        platformwidth = arr[a + 2];
-        platformheight = arr[a + 3];
-        ctx.drawImage(img, platformX, platformY, platformwidth, platformheight);
-    }
-}
-   
-      function obstacle_collision(arr, platformwidth, platformheight, platformX, platformY, levelOffset,ishurt) {
-        ishurt=0
+         ctx.fillStyle = "blue";
          for (var a = 0; a < arr.length; a += 4) {
             platformX = arr[a] + levelOffset;
-            platformY = arr[a + 1]-camera.y;
+            platformY = arr[a + 1] - camera.y;
             platformwidth = arr[a + 2];
             platformheight = arr[a + 3];
-            if (player.y > (platformY - 100) && (player.x + 100) >= (platformX || (platformX + platformwidth)) && player.x <= ((platformX + platformwidth) || platformX) && player.y < platformY + 100) {
+            ctx.drawImage(img, platformX, platformY, platformwidth, platformheight);
+         }
+      }
+
+      function obstacle_collision(arr, platformwidth, platformheight, platformX, platformY, levelOffset, ishurt) {
+         for (var a = 0; a < arr.length; a += 4) {
+            platformX = arr[a] + levelOffset;
+            platformY = arr[a + 1] - camera.y;
+            platformwidth = arr[a + 2];
+            platformheight = arr[a + 3];
+            if (player.y > (platformY - 100) && (player.x + 100) >= platformX && player.x + 100 <= platformX + (platformwidth) && player.x >= (platformX) && (player.y < platformY)) {
                coyotetime = 12;
                gravityspeed = 0;
-               player.y =  platformY - 100;
+               player.y = platformY - 100;
+               isclimb = 1;
                isground = player.y;
-               ishurt=1
-               
-               return ishurt;
+               ishurt = 1;
+               return 1;
             }
             if ((player.x + 100) >= platformX && player.x + 100 <= (platformX + (platformwidth / 2)) && player.y - 100 > platformY && player.y - 100 < (platformY + platformheight)) {
                player.x = platformX - 100;
                xvelocity = 0;
                isclimb = 1;
-              
-               ishurt=1;
-               return ishurt
-               // console.log("don't fix ")
+               ishurt = 1;
+               return ishurt;
             } else if (player.x <= (platformX + platformwidth) && player.x >= (platformX + (platformwidth / 2)) && player.y > platformY && player.y - 100 > (platformY) && player.y - 100 < (platformY + platformheight)) {
                player.x = platformX + platformwidth;
-             xvelocity = 0;
+               xvelocity = 0;
                isclimb = 1;
-               
-               ishurt=1;
-               return ishurt
+               ishurt = 1;
+               return ishurt;
             }
          }
+         return ishurt;
       }
-      let platform_Yvelocity=0;
+      function entity_collision(arr, platformwidth, platformheight, platformX, platformY, levelOffset, ishurt, coords) {
+         for (var i = 0; i < coords.length; i += 2) {
+            for (var a = 0; a < arr.length; a += 4) {
+            platformX = arr[a] + levelOffset;
+            platformY = arr[a + 1] - camera.y;
+            platformwidth = arr[a + 2];
+            platformheight = arr[a + 3];
+            if (coords[i+1]> (platformY - 100) && (coords[i] + 100) >= platformX && coords[i] + 100 <= platformX + (platformwidth) && coords[i] >= (platformX) && (coords[i+1] < platformY)) {
+               coords[i+1] = platformY - 100;
+               ishurt = 1;
+               return 1;
+            }
+            if ((coords[i] + 100) >= platformX && coords[i] + 100 <= (platformX + (platformwidth / 2)) && coords[i+1] - 200 > platformY && coords[i+1] - 200 < (platformY + platformheight)) {
+               coords[i+1] = platformX - 200;
+               ishurt = 1;
+               return ishurt;
+            } else if (coords[i] <= (platformX + platformwidth) && coords[i]>= (platformX + (platformwidth / 2)) && coords[i+1] > platformY && coords[i+1]- 200 > (platformY) &&coords[i+1] - 200 < (platformY + platformheight)) {
+               coords[i] = platformX + platformwidth;
+               ishurt = 1;
+               return ishurt;
+            }
+         }
+
+
+
+         }
+         return ishurt;
+      }
+      let platform_Yvelocity = 0;
       let frameX;
       let frameY;
-      let sheetX=0;
+      let sheetX = 0;
 
       let camera = {
-    x: 0,
-    y: 0,
-    lerpSpeed: 0.1,
-    clamp: function(value, min, max) {
-        return Math.max(min, Math.min(value, max));
-    },
-    lerp: function(start, end, t) {
-        return start + (end - start) * t;
-    },
-    update: function(targetX, targetY) {
-        let targetCameraX = targetX - viewportWidth / 2;
-        let targetCameraY = targetY - viewportHeight / 2;
+         x: 0,
+         y: 0,
+         lerpSpeed: 0.1,
+         clamp: function (value, min, max) {
+            return Math.max(min, Math.min(value, max));
+         },
+         lerp: function (start, end, t) {
+            return start + (end - start) * t;
+         },
+         update: function (targetX, targetY) {
+            let targetCameraX = targetX - viewportWidth / 2;
+            let targetCameraY = targetY - viewportHeight / 2;
 
-        // Edge locking
-        targetCameraX = this.clamp(targetCameraX, 0, worldWidth - viewportWidth);
-        targetCameraY = this.clamp(targetCameraY, 0, worldHeight - viewportHeight);
+            // Edge locking
+            targetCameraX = this.clamp(targetCameraX, 0, worldWidth - viewportWidth);
+            targetCameraY = this.clamp(targetCameraY, 0, worldHeight - viewportHeight);
 
-        // Smooth camera movement
-        this.x = this.lerp(this.x, targetCameraX, this.lerpSpeed);
-        this.y = this.lerp(this.y, targetCameraY, this.lerpSpeed);
-    }
-};
+            // Smooth camera movement
+            this.x = this.lerp(this.x, targetCameraX, this.lerpSpeed);
+            this.y = this.lerp(this.y, targetCameraY, this.lerpSpeed);
+         }
+      };
 
 
 
 
       sheetY = 1;
-      function animate( sheetY, sheetX, animation,image,object,location,gameframes) {
-         sheetY=animation.y
+      function animate(sheetY, sheetX, animation, image, object, location, gameframes) {
+         sheetY = animation.y
          frameX = animation.width;
-         sheetX=animation.starW
+         sheetX = animation.starW
          frameY = animation.height;
          if (counter == 10) {
             if (animation.frames > gameframes) {
@@ -389,20 +396,20 @@
                gameframes = 0;
             }
          }
-         for(var i=0 ;i<location.length;i+=2){
-            
-            ctx.drawImage(image,sheetX,sheetY,frameX,frameY,location[i],location[i+1],object.width,object.height)
+         for (var i = 0; i < location.length; i += 2) {
+
+            ctx.drawImage(image, sheetX, sheetY, frameX, frameY, location[i], location[i + 1], object.width, object.height)
          }
       }
       checkpoint = 0;
-      floor=1250
-      let desertY=780
+      floor = 1250
+      let desertY = 780
       //update function
       function update() {
 
          if (lives > 0) {
-            if(checkpoint==0){
-               checkpoint=2
+            if (checkpoint == 0) {
+               checkpoint = 2
             }
             document.getElementById("respawn").style.visibility = "hidden";
             ctx.canvas.width = window.outerWidth;
@@ -419,14 +426,11 @@
             heartsImg.src = "heart.png";
             platformImg = new Image();
             platformImg.src = "platform.png";
-            
-            
-           
             ctx.fillStyle = "orange"
-            obstacle(levels, platformwidth, platformheight, platformX, platformY,0,platformImg)
-            ctx.drawImage(desertImg, desertX,floor-camera.y , window.outerWidth, 200);
-            ctx.drawImage(desertImg, desert2X, floor-camera.y , window.outerWidth, 200);
-            obstacle(spike, platformwidth, platformheight, platformX, platformY, 0,spikeImg)
+            obstacle(levels, platformwidth, platformheight, platformX, platformY, 0, platformImg)
+            ctx.drawImage(desertImg, desertX, floor - camera.y, window.outerWidth, 200);
+            ctx.drawImage(desertImg, desert2X, floor - camera.y, window.outerWidth, 200);
+            obstacle(spike, platformwidth, platformheight, platformX, platformY, 0, spikeImg)
             for (var i = 1; i <= lives; i++) {
                ctx.drawImage(heartsImg, hearts.x, hearts.y, hearts.width, hearts.height);
                hearts.x += hearts.width + 20;
@@ -435,44 +439,41 @@
             for (var i = 0; i < goomba_coords.length; i += 2) {
                ctx.fillStyle = "green"
                goomba_coords[i + 1] += goomba.Yspeed;
-               if (goomba_coords + 100 == player.y) {
-                  
-               }
                //    goomba_coords[i] -= 3;
-               if (goomba_coords[i + 1] > floor-200) {
-                  goomba_coords[i + 1] = floor-200
+               if (goomba_coords[i + 1] > floor-camera.y-200) {
+                  goomba_coords[i + 1] = floor-camera.y-200
+                  goomba.Yspeed=0
                }
-               
-               
+               entity_collision(levels, platformwidth, platformheight, platformX, platformY, levelOffset, 0,goomba_coords)
+
             }
-            animate( sheetY, sheetX, currentanimation_goomba,goombaImg,goomba,goomba_coords,gameframes)
-            animate( sheetY, sheetX, currentanimation_shooter,shooterImg,shooter_enemy,shooter_placement,gameframes)
+            animate(sheetY, sheetX, currentanimation_goomba, goombaImg, goomba, goomba_coords, gameframes)
+            animate(sheetY, sheetX, currentanimation_shooter, shooterImg, shooter_enemy, shooter_placement, gameframes)
             camera.update(player.x, player.y);
-            
+
             player.y = camera.clamp(player.y, 0, worldHeight - player.height);
-            
-            
-            
-            player.screenX=player.x
+
+
+
+            player.screenX = player.x
             gravityspeed += gravity;
             goomba.Yspeed += gravity;
             player.y += gravityspeed;
-            player.screenY=player.y
+            player.screenY = player.y
             if (xvelocity <= 300) {
-               
+
                player.x += xvelocity;
             }
             if (xvelocity > 0) {
-               
+
                xvelocity -= 4;
             }
             if (xvelocity < 0) {
                xvelocity += 4
             }
             isclimb = 0;
-            
-            obstacle_collision(spike, platformwidth, platformheight, platformX, platformY, 0,0)
-            
+
+
             //bullet
             for (var i = 0; i <= bulletlist.length; i += 2) {
 
@@ -492,47 +493,47 @@
             }
             if (player.x < 50) {
                player.x = 50;
-              
+
             }
+
             debugger
             if (damageframes == 20) {
-               let k2=0;
-               if(obstacle_collision(spike, platformwidth, platformheight, platformX, platformY, levelOffset,0)==1){
-                  lives-=1;
+               let k2 = 0;
+               if (obstacle_collision(spike, platformwidth, platformheight, platformX, platformY, 0, 0) != 0) {
+                  lives -= 1;
                }
                for (var i = 0; i < goomba_coords.length; i += 2) {
                   goomba.x = goomba_coords[i]
                   goomba.y = goomba_coords[i + 1]
-                  if (detectCollision(goomba, player) && currentanimation!=animatelist.slashright && currentanimation!=animatelist.slashleft) {
+                  if (detectCollision(goomba, player) && currentanimation != animatelist.slashright && currentanimation != animatelist.slashleft) {
                      lives -= 1;
                   }
 
-                  if(goomba.health[k2]<=0){
+                  if (goomba.health[k2] <= 0) {
                      console.log(goomba.health[k2])
-                     goomba_coords.splice(i,2)
-                     goomba.health.splice(k2,1)
+                     goomba_coords.splice(i, 2)
+                     goomba.health.splice(k2, 1)
                   }
-                  k2+=1;
+                  k2 += 1;
                }
-               
                damageframes = 0
-               let health_count=0;
-               for (var i = 0; i < goomba_coords.length/2; i +=1) {
+               let health_count = 0;
+               for (var i = 0; i < goomba_coords.length / 2; i += 1) {
                   goomba.x = goomba_coords[i]
                   goomba.y = goomba_coords[i + 1]
-                  player.width+=200;
-                  if (detectCollision(goomba, player) && currentanimation==animatelist.slashright || currentanimation==animatelist.slashleft) {
-                     goomba.health[health_count]-=3;
+                  player.width += 200;
+                  if (detectCollision(goomba, player) && currentanimation == animatelist.slashright || currentanimation == animatelist.slashleft) {
+                     goomba.health[health_count] -= 3;
                      console.log(goomba.health)
                   }
-                  player.width-=200;
-                  
-                  
-                  health_count+=1;
+                  player.width -= 200;
+
+
+                  health_count += 1;
                }
             }
             if (damageframes != 20) {
-               
+
                damageframes += 1;
             }
             if (lives <= 0) {
@@ -544,21 +545,19 @@
                ctx.fillRect(500, 200, 400, 200);
                document.getElementById("respawn").style.visibility = "visible";
             }
-            
-            obstacle_collision(levels, platformwidth, platformheight, platformX, platformY, levelOffset,0)
-            
+
+            obstacle_collision(levels, platformwidth, platformheight, platformX, platformY, levelOffset, 0)
+             
             if (coyotetime > 0) {
                coyotetime -= 1;
             }
-            if (player.y > floor-100-camera.y) {
-               isground = floor-100-camera.y;
+            if (player.y > floor - 100 - camera.y) {
+               isground = floor - 100 - camera.y;
                gravityspeed = 0;
-               player.y = floor-100-camera.y;
+               player.y = floor - 100 - camera.y;
                isclimb = 0;
             }
-            //checkpoint
-            //goomba physics
-            
+
             //animate
             if (counter == 10) {
                if (currentanimation.frames >= player_gameframes) {
@@ -567,7 +566,7 @@
                }
                player_gameframes += 1;
                if (currentanimation.frames < player_gameframes) {
-                 player_gameframes  = 0;
+                  player_gameframes = 0;
                }
                counter = 0;
             }
@@ -576,15 +575,15 @@
             //sheetX_player=1;
             sheetY_player = 1;
             // console.log(gameframes)
-            ctx.drawImage(playerImg, sheetX_player, sheetY_player, frameX_player, frameY_player, player.x,player.y, 100, 100);
+            ctx.drawImage(playerImg, sheetX_player, sheetY_player, frameX_player, frameY_player, player.x, player.y, 100, 100);
             counter++;
             if (cooldown != 10) {
                cooldown += 1
             }
-            
+
             for (var i = 0; i < shooter_placement.length; i += 2) {
                shooter_placement[i] += ((xvelocity * -1))
-               
+
             }
             for (var j = 0; j <= levels.length; j += 4) {
                levels[j] += (xvelocity * -1);
@@ -596,39 +595,39 @@
             for (var k = 0; k < goomba_coords.length; k += 2) {
                goomba_coords[k] += (xvelocity * -1)
             }
-            
-            if (goomba.y   > floor) {
-               goomba.y = floor;
+
+            if (goomba.y > floor-200) {
+               goomba.y = floor-200;
                goomba.Yspeed = 0;
 
             }
-         
-           
-               desert2X -= xvelocity;
-               desertX -= xvelocity;
-               if ((desertX + window.outerWidth) <= 0) {
-                  desertX = window.outerWidth;
-               }
-               if ((desert2X + window.outerWidth) <= 0) {
-                  desert2X = window.outerWidth;
-               }
-               if ((desertX + window.OuterWidth) >=window.OuterWidth) {
-                  desertX = 0;
-               }
-               if ((desert2X + window.OuterWidth) >= window.OuterWidth) {
-                  desert2X = 0;
-               }
-               //horizontal scroll
-               board.style.transform = `translate(${0}px, ${0}px)`
-            
+
+
+            desert2X -= xvelocity;
+            desertX -= xvelocity;
+            if ((desertX + window.outerWidth) <= 0) {
+               desertX = window.outerWidth;
+            }
+            if ((desert2X + window.outerWidth) <= 0) {
+               desert2X = window.outerWidth;
+            }
+            if ((desertX + window.OuterWidth) >= window.OuterWidth) {
+               desertX = 0;
+            }
+            if ((desert2X + window.OuterWidth) >= window.OuterWidth) {
+               desert2X = 0;
+            }
+            //horizontal scroll
+            board.style.transform = `translate(${0}px, ${0}px)`
+
          }
 
       }
-   
+
       //inputs
       if (lives > 0) {
          addEventListener('keydown', (event) => {
-            if (event.code == "KeyW" && (player.y == isground || isclimb == 1 || coyotetime > 0 )) {
+            if (event.code == "KeyW" && (player.y == isground || isclimb == 1 || coyotetime > 0)) {
                gravityspeed = -40;
 
 
@@ -654,36 +653,36 @@
                cooldown = 0;
             }
 
-            
-            if (event.code == "KeyK" && cooldown==10) {
+
+            if (event.code == "KeyK" && cooldown == 10) {
                if (isright == 1) {
 
                   currentanimation = animatelist.slashright
-               } 
-               if(isright==0) {
+               }
+               if (isright == 0) {
                   currentanimation = animatelist.slashleft
                }
             }
-            cooldown=0
+            cooldown = 0
          })
       }
-      addEventListener('keydown',(event)=>{
-         if (event.code == "KeyD" ) {
-               //console.log(platform)
-               
+      addEventListener('keydown', (event) => {
+         if (event.code == "KeyD") {
+            //console.log(platform)
 
-                  xvelocity += 40;
-               
-               isright = 1;
-               currentanimation = animatelist.runright
-            }
 
-            if (event.code == "KeyA" ) {
-               isright = 0
-               
-               currentanimation = animatelist.runleft
-               xvelocity -= 40;
-            }
+            xvelocity += 40;
+
+            isright = 1;
+            currentanimation = animatelist.runright
+         }
+
+         if (event.code == "KeyA") {
+            isright = 0
+
+            currentanimation = animatelist.runleft
+            xvelocity -= 40;
+         }
       })
       addEventListener('keyup', (event) => {
          if (event.code == "KeyL") {
@@ -701,7 +700,7 @@
       })
       //loop every 20 millisecond
 
-      setInterval(update,20);
+      setInterval(update, 20);
 
    </script>
 </body>
